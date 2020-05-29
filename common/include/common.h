@@ -1,5 +1,7 @@
-#ifndef __DPU_COMMON_H
-#define __DPU_COMMON_H
+#ifndef __COMMON_H
+#define __COMMON_H
+
+/* Everything in this file can be used on the host or the DPU */
 
 /* To suppress compiler warnings on unused parameters */
 #define UNUSED(_x) (_x=_x)
@@ -12,6 +14,9 @@ bottom 12 bits (0xFFF) use: BITMASK(12) */
 #define MIN(_a, _b) (_a < _b ? _a : _b)
 #define MAX(_a, _b) (_a > _b ? _a : _b)
 
+/* Make large numbers easier to read (and accurate) */
+#define MEGABYTE(_x) (_x << 20)
+
 /* If you have a value that needs alignment to the nearest _width. For example,
 0xF283 needs aligning to the next largest multiple of 16: 
 ALIGN(0xF283, 16) will return 0xF290 */
@@ -23,5 +28,5 @@ example, what is the starting address of the 1KB block that contains the address
 WINDOW_ALIGN(0xF283, 1024) will return 0xF000 */
 #define WINDOW_ALIGN(_p, _width) (((unsigned int)_p) & (0-_width))
 
-#endif	/* __DPU_COMMON_H */
+#endif	/* __COMMON_H */
 
