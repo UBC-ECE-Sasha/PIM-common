@@ -15,7 +15,10 @@ bottom 12 bits (0xFFF) use: BITMASK(12) */
 #define MAX(_a, _b) (_a > _b ? _a : _b)
 
 /* Make large numbers easier to read (and accurate) */
+#define KILOBYTE(_x) (_x << 10)
 #define MEGABYTE(_x) (_x << 20)
+#define GIGABYTE(_X) (_x << 30)
+#define TERABYTE(_X) (_x << 40)
 
 /* If you have a value that needs alignment to the nearest _width. For example,
 0xF283 needs aligning to the next largest multiple of 16: 
