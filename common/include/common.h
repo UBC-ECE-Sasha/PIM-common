@@ -20,6 +20,9 @@ bottom 12 bits (0xFFF) use: BITMASK(12) */
 #define GIGABYTE(_X) (_x << 30)
 #define TERABYTE(_X) (_x << 40)
 
+#define WRAM_SIZE KILOBYTE(64)
+#define MRAM_SIZE MEGABYTE(64)
+
 /* If you have a value that needs alignment to the nearest _width. For example,
 0xF283 needs aligning to the next largest multiple of 16: 
 ALIGN(0xF283, 16) will return 0xF290 */
