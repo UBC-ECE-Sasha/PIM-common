@@ -17,8 +17,8 @@ bottom 12 bits (0xFFF) use: BITMASK(12) */
 /* Make large numbers easier to read (and accurate) */
 #define KILOBYTE(_x) (_x << 10)
 #define MEGABYTE(_x) (_x << 20)
-#define GIGABYTE(_X) (_x << 30)
-#define TERABYTE(_X) (_x << 40)
+#define GIGABYTE(_x) (_x << 30)
+#define TERABYTE(_x) (_x << 40)
 
 #define WRAM_SIZE KILOBYTE(64)
 #define MRAM_SIZE MEGABYTE(64)
