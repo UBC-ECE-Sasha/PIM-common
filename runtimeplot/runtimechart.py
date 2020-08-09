@@ -244,23 +244,30 @@ def main():
     info_data = []
 
     for p in plots:
-        ymin, ymax = min(plots[p]["DPU total"]), max(plots[p]["DPU total"])
-        ymin_ind = plots[p]["DPU total"].index(ymin)
-        ymax_ind = plots[p]["DPU total"].index(ymax)
-        xmin, xmax = list_dpus[ymin_ind], list_dpus[ymax_ind]
-
-        label_min = str(ymin) if p == "Host (1 thread)" else f"{xmin} / {ymin}"
-        label_max = str(ymax) if p == "Host (1 thread)" else f"{xmax} / {ymax}"
-        info_data.append((p, label_min, label_max))
-
         if config.type == "line":
-            ax.plot(
-                list_dpus,
-                plots[p]["DPU total"],
-                marker="o",
-                label=p,
-                markevery=[ymin_ind, ymax_ind],
-            )
+            if p == "Host (1 thread)":
+                ax.plot(
+                    list_dpus,
+                    plots[p]["total"],
+                    label=p,
+                    linestyle="dashed"
+                )
+            else:
+                ymin, ymax = min(plots[p]["DPU total"]), max(plots[p]["DPU total"])
+                ymin_ind = plots[p]["DPU total"].index(ymin)
+                ymax_ind = plots[p]["DPU total"].index(ymax)
+                xmin, xmax = list_dpus[ymin_ind], list_dpus[ymax_ind]
+
+                label_min = str(ymin) if p == "Host (1 thread)" else f"{xmin} / {ymin}"
+                label_max = str(ymax) if p == "Host (1 thread)" else f"{xmax} / {ymax}"
+                info_data.append((p, label_min, label_max))
+                ax.plot(
+                    list_dpus,
+                    plots[p]["DPU total"],
+                    marker="o",
+                    label=p,
+                    markevery=[ymin_ind, ymax_ind],
+                )
         else:
             bottom = [0.0 for _ in plots[p]["remainder"]]
 
