@@ -1,9 +1,12 @@
 import argparse
 from typing import List, Dict, Tuple, Optional
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
+matplotlib.rc('hatch', linewidth=0.3)
+hatches = ["////", "\\\\\\\\\\", "xxxxxx", "-----", "||||||", "+++++", "//", "*", "+", "O", "o", "-"]
 
 def split_by_tasklet(
     includetasklet: Optional[List[int]],
@@ -168,7 +171,7 @@ def parse_args() -> argparse.Namespace:
         "--nohost", help="Do not include host", action="store_true", default=False
     )
     parser.add_argument(
-        "--outputfile", help="Output chart", default="output.png", type=str
+        "--outputfile", help="Output chart", default="output.pdf", type=str
     )
     parser.add_argument(
         "--type", help="Chart type (bar or line)", default="line", type=str
@@ -239,7 +242,8 @@ def main():
         },
     )
 
-    fig, ax = plt.subplots()
+    # 6.8 inch high figure, 2.5 inch across (matches column width of paper)
+    fig, ax = plt.subplots(figsize=(6.8, 2.5))
 
     info_data = []
 
@@ -268,10 +272,24 @@ def main():
                     label=p,
                     markevery=[ymin_ind, ymax_ind],
                 )
+
+                # make sure y axis is always zero
+                ylim = ax.get_ylim()
+                ax.set_ylim((0, ylim[1]))
         else:
             bottom = [0.0 for _ in plots[p]["remainder"]]
 
-            for k in (
+            # compute spacing between DPU bars, first figure out the step
+            # guess based on the first two, and assert the rest are the same
+            # otherwise rendering will be off
+            step = list_dpus[1] - list_dpus[0]
+            for a, b in zip(list_dpus, list_dpus[1:]):
+                check_step = b-a
+                assert step == check_step, f"DPU increment isn't consistent, expected {step} based on first two samples, got: {check_step}"
+            # add a small amount of spacing for each to get some white between each bar
+            step = step - 1
+
+            for idx, k in enumerate((
                 "remainder",
                 "prepare",
                 "load",
@@ -280,13 +298,14 @@ def main():
                 "DPU execution",
                 "copy out",
                 "free",
-            ):
+            )):
                 ax.bar(
                     list_dpus,
                     plots[p][k],
                     bottom=bottom,
                     label=k,
-                    width=len(list_dpus) / 8,
+                    width=step,
+                    # hatch=hatches[idx % len(hatches)]  # hatches don't really seem to help grayscale readability here, too many bars
                 )
                 bottom = calculate_bottom(bottom, plots[p][k])
 
@@ -299,6 +318,10 @@ def main():
     if config.ystepsize is not None:
         start, end = ax.get_ylim()
         ax.yaxis.set_ticks(np.arange(start, end, config.ystepsize))
+
+    # add grid 
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(color='gray', linestyle='dashed')
 
     header = ("Tasklets", "min dpu/time", "max dpu/time")
     print("| ", " | ".join(header), " |")
@@ -315,7 +338,7 @@ def main():
     plt.xlabel(config.xlabel)
     plt.ylabel(config.ylabel)
 
-    plt.savefig(config.outputfile)
+    plt.savefig(config.outputfile, bbox_inches='tight', dpi=300)
 
 
 if __name__ == "__main__":
