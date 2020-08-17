@@ -1,27 +1,15 @@
-# Chartgen
+# Chart Generators
 
-## Summary
-
-Given a CSV with:
-
-```csv
-Host,DPU,PREPARE,DPU_LOAD,DPU_ALLOC,COPY_IN,DPU_RUN,COPY_OUT,DPU_FREE,NR_TASKLETS,NR_DPUS
-```
-
-Generate a runtime vs DPU line or bar chart.
-
-[gendata.sh](gendata.sh) can be used for repeated runs over DPU intervals, the command for DPU only benchmark
-or DPU and host benchmark need to be defined in `dpu_only_command()` and `dpu_host_command()`.
-
-The shell script excpects output for the DPU run on line one, and host (if specified) on line 2.
+## Barchart
 
 ## Usage
 
 ```txt
-usage: runtimechart.py [-h] --csvfile CSVFILE [--xlabel XLABEL] [--ylabel YLABEL] [--xstepsize XSTEPSIZE] [--ystepsize YSTEPSIZE]
-                       [--title TITLE] [--nohost] [--outputfile OUTPUTFILE] [--type TYPE] [--includetasklet INCLUDETASKLET]
+usage: barchart.py [-h] --csvfile CSVFILE [--xlabel XLABEL] [--ylabel YLABEL] [--xstepsize XSTEPSIZE] [--xstart XSTART]
+                   [--xstop XSTOP] [--ystepsize YSTEPSIZE] [--title TITLE] [--outputfile OUTPUTFILE] --headers HEADERS
+                   [HEADERS ...]
 
-Generate a runtime chart for PIM-HDC
+Generate a bar chart
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -30,15 +18,15 @@ optional arguments:
   --ylabel YLABEL       Chart y-axis label
   --xstepsize XSTEPSIZE
                         Chart x-axis stepsize
+  --xstart XSTART       x-axis start position
+  --xstop XSTOP         x-axis stop position
   --ystepsize YSTEPSIZE
                         Chart y-axis stepsize
   --title TITLE         Chart title
-  --nohost              Do not include host
   --outputfile OUTPUTFILE
                         Output chart
-  --type TYPE           Chart type (splitbar or line)
-  --includetasklet INCLUDETASKLET
-                        Include tasklets
+  --headers HEADERS [HEADERS ...]
+                        Headers
 
 ```
 
@@ -47,24 +35,8 @@ optional arguments:
 Bar:
 
 ```shell script
-python3 runtimechart.py --csvfile run.csv.example \
-                        --nohost --type bar \
-                        --includetasklet 13
-                        --title "PIM-HDC Runtimes (13 tasklets)"
+./barchart --csvfile barchart.csv.example \
+    --xstart 192 --xstop 576 --xstepsize 64 --headers Prepare "Copy in" Run NR_DPUS
 ```
 
-![Example bar graph](bar.output.example.png)
-
-
-Line:
-
-```shell script
-python3 runtimechart.py --csvfile run.csv.example \
-                        --nohost --type line \
-                        --includetasklet 6 \
-                        --includetasklet 13 \
-                        --includetasklet 16 \
-                        --title "PIM-HDC Runtimes (13 tasklets)"
-```
-
-![Example line graph](line.output.example.png)
+[Example output](barchart.example.pdf)
