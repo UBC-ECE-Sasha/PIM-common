@@ -26,7 +26,7 @@ def plot_results(results, filename, yaxis='time', **kwargs):
     # for more: https://matplotlib.org/3.2.2/api/markers_api.html
     # markers = ['o', 'v', 's', 'p', '*', 'D', 'x']
 
-    results['rate(MB/s)'] = results['rate(MB/s)'] / 1000
+    results['rate(MB/s)'] = results['rate(MB/s)'] / 1024
     ax.plot(results["DPUs"], results["rate(MB/s)"], label="DPU Aggregate")
 
     # set up legend

@@ -1,6 +1,6 @@
 
 
-all: example.pdf breakdown_example.pdf
+all: example.pdf breakdown_example.pdf dpu-transfer.pdf
 
 example.pdf: example.csv ./chart_dpu_vs_host.py
 	./chart_dpu_vs_host.py -r $< -o $@ \
@@ -10,3 +10,6 @@ example.pdf: example.csv ./chart_dpu_vs_host.py
 breakdown_example.pdf: breakdown_example.csv ./chart_breakdown.py
 	./chart_breakdown.py -r $< -o $@ \
 		--xlab "Raw Filtering Selectivity" --ylab "Time (s)"
+
+dpu-transfer.pdf:
+	./chart_dpu_data_xfer.py -r dpu_data_xfer_speed.csv -o dpu-transfer.pdf
