@@ -21,12 +21,12 @@ def plot_results(results, filename, yaxis='time', **kwargs):
     fig, ax = plt.subplots(figsize=(6.8, 2.5))
 
     # Note: scaling down to byte to use EngFormatter
-    ax.axhline(19456*1000*1000, label="DDR4 Memory Channel", linestyle="--", color='red')
+    ax.axhline(19.456, label="DDR4 Memory Channel", linestyle="--", color='red')
 
     # for more: https://matplotlib.org/3.2.2/api/markers_api.html
     # markers = ['o', 'v', 's', 'p', '*', 'D', 'x']
 
-    results['rate(MB/s)'] = results['rate(MB/s)'] * 1000 * 1000
+    results['rate(MB/s)'] = results['rate(MB/s)'] / 1000
     ax.plot(results["DPUs"], results["rate(MB/s)"], label="DPU Aggregate")
 
     # set up legend
@@ -36,15 +36,15 @@ def plot_results(results, filename, yaxis='time', **kwargs):
     # configure ticks to be what is in the columns
     ax.xaxis.set_major_locator(plticker.MultipleLocator(64))
 
-    ax.yaxis.set_major_locator(plticker.MultipleLocator(64*1000*1000*1000))
-    ax.yaxis.set_major_formatter(plticker.EngFormatter(unit='B'))
+    ax.yaxis.set_major_locator(plticker.MultipleLocator(64))
+    # ax.yaxis.set_major_formatter(plticker.EngFormatter(unit=''))
 
     # special tick for ddr4
-    extraticks = [19000*1000*1000]
+    extraticks = [19]
     plt.yticks(list(plt.yticks()[0]) + extraticks)
 
     # set top-axis
-    ticks = plticker.MultipleLocator(64*1000*1000*1000).tick_values(0, max(results['rate(MB/s)']))
+    ticks = plticker.MultipleLocator(64).tick_values(0, max(results['rate(MB/s)']))
     ax.set_ylim(0, max(ticks))
 
     ax.set_ylabel("Throughput (GB/s)", fontsize=fontsize)
