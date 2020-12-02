@@ -13,3 +13,6 @@ breakdown_example.pdf: breakdown_example.csv ./chart_breakdown.py
 
 dpu-transfer.pdf:
 	./chart_dpu_data_xfer.py -r dpu_data_xfer_speed.csv -o dpu-transfer.pdf
+
+bw_vs_size.png:
+	./bw_vs_size.py -r dpu_data_xfer_speed.csv -o $@
