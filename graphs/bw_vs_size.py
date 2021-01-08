@@ -21,7 +21,8 @@ def plot_results(results, filename, yaxis='time', **kwargs):
     fig, ax = plt.subplots(figsize=(6.8, 2.5))
 
     # Note: scaling down to byte to use EngFormatter
-    ax.axhline(19.456, label="DDR4 Memory Channel", linestyle="--", color='red')
+    ax.axhline(19.456, label="DDR4 Memory Channel x1", linestyle="--", color='red')
+    ax.axhline(19.456*4, label="DDR4 Memory Channel x4", linestyle="--", color='orange')
 
     # for more: https://matplotlib.org/3.2.2/api/markers_api.html
     # markers = ['o', 'v', 's', 'p', '*', 'D', 'x']
@@ -39,7 +40,7 @@ def plot_results(results, filename, yaxis='time', **kwargs):
     ax.yaxis.set_major_locator(plticker.MultipleLocator(64))
 
     # special tick for ddr4
-    extraticks = [19]
+    extraticks = [19, 19*4]
     plt.yticks(list(plt.yticks()[0]) + extraticks)
 
     # set top-axis
